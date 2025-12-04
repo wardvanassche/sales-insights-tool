@@ -5,30 +5,27 @@
 </script>
 
 <template>
-    <form class="space-y-4 p-4">
-        <div class="flex flex-col">
-            <label class="mb-1 font-semibold">Company Name</label>
-            <input
-                type="text"
-                placeholder="Enter company name"
-                class="border rounded px-3 py-2"
-            />
-        </div>
+    <form action="#" method="POST">
+        <div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+            <div class="sm:col-span-2">
+                <label for="name" class="block text-sm/6 font-semibold text-gray-900">Company Name</label>
+                <div class="mt-2.5">
+                    <input id="name" name="name" type="text" placeholder="Enter company name"
+                           class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600" />
+                </div>
+            </div>
+            <div class="sm:col-span-2">
+                <label for="url" class="block text-sm/6 font-semibold text-gray-900">Company URL</label>
+                <div class="mt-2.5">
+                    <input type="url" name="url" id="url" placeholder="https://example.com"
+                           class="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600" />
+                </div>
+            </div>
 
-        <div class="flex flex-col">
-            <label class="mb-1 font-semibold">Company URL</label
-            ><input
-            type="text"
-            placeholder="https://example.com"
-            class="border rounded px-3 py-2"
-        />
         </div>
-
-        <button
-            type="submit"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-            Submit
-        </button>
+        <div class="mt-10 flex justify-end">
+            <button type="submit"
+                    class="rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Quickscan</button>
+        </div>
     </form>
 </template>
