@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Form from '@/components/Form.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { quickscan } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
@@ -19,8 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         <div
             class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
         >
-            <h1>Every Day Quickscan</h1>
-
+            <Form />
         </div>
     </AppLayout>
 </template>
