@@ -1,7 +1,6 @@
 <script setup lang="ts">
 // defineProps<Props>();
 // no props needed for now
-import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 
@@ -38,18 +37,19 @@ import { Input } from '@/components/ui/input';
                         type="url"
                         name="url"
                         id="url"
-                        placeholder="https://every-day.nl"
+                        placeholder="Voor een url in"
                     />
                 </div>
             </div>
         </div>
-        <div class="mt-10 flex justify-end">
-            <Button
+        <div class="mt-10 flex justify-start">
+            <button
                 type="submit"
                 :disabled="processing"
+                class="rounded-lg bg-[#0A3D62] px-5 py-2 text-sm font-medium text-white hover:bg-[#08334E]"
             >
                 Quickscan
-            </Button>
+            </button>
         </div>
     </form>
 </template>
