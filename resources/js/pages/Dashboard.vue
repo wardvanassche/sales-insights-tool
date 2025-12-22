@@ -3,7 +3,6 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import PlaceholderPattern from '../components/PlaceholderPattern.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,37 +10,35 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
 ];
+defineProps({
+    user: Object,
+})
 </script>
 
 <template>
     <Head title="Dashboard" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div
-            class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
-        >
-            <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-                <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
-                >
-                    <PlaceholderPattern />
-                </div>
-                <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
-                >
-                    <PlaceholderPattern />
-                </div>
-                <div
-                    class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border"
-                >
-                    <PlaceholderPattern />
-                </div>
+        <div class="flex flex-col items-center justify-center h-full text-center">
+            <div class="mb-6 flex h-28 items-center justify-center rounded-full">
+                <img src="/logo.png" alt="Logo" class="h-full">
             </div>
-            <div
-                class="relative min-h-[100vh] flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
-            >
-                <PlaceholderPattern />
-            </div>
+
+            <h1 class="text-3xl font-bold text-gray-900">
+                Welkom, {{ user.name }}
+            </h1>
+
+            <p class="mt-2 text-gray-600 max-w-md">
+                Je hebt nog geen quickscans. Start je eerste en ontdek inzichten in minuten.
+            </p>
+
+            <a href="quickscan">
+                <button
+                    class="mt-6 rounded-lg bg-[#0A3D62] px-6 py-3 text-sm font-medium text-white hover:bg-[#08334E]"
+                >
+                    Maak eerste quickscan
+                </button>
+            </a>
         </div>
     </AppLayout>
 </template>
