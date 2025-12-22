@@ -8,8 +8,8 @@ import AppLogoIcon from '@/components/AppLogoIcon.vue';
     >
         <AppLogoIcon />
     </div>
-    <div class="ml-1 grid flex-1 text-left text-sm">
-        <span class="mb-0.5 truncate leading-tight font-bold text-[#0A3D62]"
+    <div class="grid flex-1 text-left">
+        <span class="mb-0.5 truncate font-semibold leading-tight tracking-tight text-foreground"
             >Every Day Quickscan</span
         >
     </div>

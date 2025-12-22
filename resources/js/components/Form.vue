@@ -3,6 +3,7 @@
 // no props needed for now
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 
 </script>
 
@@ -12,7 +13,7 @@ import { Input } from '@/components/ui/input';
             <div class="sm:col-span-2">
                 <Label
                     for="name"
-                    class="block text-sm/6 font-semibold text-gray-900 dark:text-gray-100"
+                    class="block text-sm/6"
                 >
                     Bedrijfsnaam
                 </Label>
@@ -28,7 +29,7 @@ import { Input } from '@/components/ui/input';
             <div class="sm:col-span-2">
                 <Label
                     for="url"
-                    class="block text-sm/6 font-semibold text-gray-900 dark:text-gray-100"
+                    class="block text-sm/6"
                 >
                     URL
                 </Label>
@@ -37,19 +38,18 @@ import { Input } from '@/components/ui/input';
                         type="url"
                         name="url"
                         id="url"
-                        placeholder="Voor een url in"
+                        placeholder="Voer een url in"
                     />
                 </div>
             </div>
         </div>
         <div class="mt-10 flex justify-start">
-            <button
+            <Button
                 type="submit"
                 :disabled="processing"
-                class="rounded-lg bg-[#0A3D62] px-5 py-2 text-sm font-medium text-white hover:bg-[#08334E]"
             >
                 Quickscan
-            </button>
+            </Button>
         </div>
     </form>
 </template>
