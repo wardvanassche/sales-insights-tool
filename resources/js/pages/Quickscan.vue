@@ -17,14 +17,30 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Quickscan" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex flex-row gap-10 p-4">
+        <div class="flex h-full gap-10 p-6">
             <div class="flex-1">
-                <Form />
+                <div class="rounded-xl border bg-card p-6 shadow-sm">
+                    <Form />
+                </div>
             </div>
 
             <div class="flex-1">
-                <h1>Analyse</h1>
+                <div
+                    class="flex h-full flex-col rounded-xl border bg-card p-6 shadow-sm"
+                >
+                    <h1 class="mb-4 font-semibold text-foreground">
+                        Analyse
+                    </h1>
+
+                    <div
+                        class="flex flex-1 items-center justify-center rounded-lg
+                       bg-muted/40 text-muted-foreground"
+                    >
+                        Start een quickscan om inzichten te bekijken
+                    </div>
+                </div>
             </div>
         </div>
+
     </AppLayout>
 </template>
