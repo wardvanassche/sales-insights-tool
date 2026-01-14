@@ -17,8 +17,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     <Head title="Quickscan" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="flex h-full gap-10 p-6">
-            <div class="flex-1">
+        <div class="flex flex-col h-full gap-10 p-6 lg:flex-row">
+            <div class="lg:flex-1">
                 <div class="rounded-xl border bg-card p-6 shadow-sm">
                     <Form />
                 </div>
