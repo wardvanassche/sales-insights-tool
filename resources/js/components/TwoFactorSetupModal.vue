@@ -46,26 +46,26 @@ const modalConfig = computed<{
 }>(() => {
     if (props.twoFactorEnabled) {
         return {
-            title: 'Two-Factor Authentication Enabled',
+            title: 'Twee-factor-authenticatie ingeschakeld',
             description:
-                'Two-factor authentication is now enabled. Scan the QR code or enter the setup key in your authenticator app.',
-            buttonText: 'Close',
+                'Twee-factor-authenticatie is nu ingeschakeld. Scan de QR-code of voer de instelsleutel in je authenticatie-app in.',
+            buttonText: 'Sluit',
         };
     }
 
     if (showVerificationStep.value) {
         return {
-            title: 'Verify Authentication Code',
-            description: 'Enter the 6-digit code from your authenticator app',
-            buttonText: 'Continue',
+            title: 'Verifieer authenticatiecode',
+            description: 'Voer de 6-cijferige code in uit je authenticatie-app',
+            buttonText: 'Verder',
         };
     }
 
     return {
-        title: 'Enable Two-Factor Authentication',
+        title: 'Twee-factor-authenticatie inschakelen',
         description:
-            'To finish enabling two-factor authentication, scan the QR code or enter the setup key in your authenticator app',
-        buttonText: 'Continue',
+            'Om twee-factor-authenticatie te voltooien, scan je de QR-code of voer je de instelsleutel in je authenticatie-app in.',
+        buttonText: 'Verder',
     };
 });
 
@@ -190,7 +190,7 @@ watch(
                                 class="absolute inset-0 top-1/2 h-px w-full bg-border"
                             />
                             <span class="relative bg-card px-2 py-1"
-                                >or, enter the code manually</span
+                                >of voer de code handmatig in</span
                             >
                         </div>
 
@@ -278,7 +278,7 @@ watch(
                                     @click="showVerificationStep = false"
                                     :disabled="processing"
                                 >
-                                    Back
+                                    Terug
                                 </Button>
                                 <Button
                                     type="submit"
@@ -287,7 +287,7 @@ watch(
                                         processing || codeValue.length < 6
                                     "
                                 >
-                                    Confirm
+                                    Bevestigen
                                 </Button>
                             </div>
                         </div>
