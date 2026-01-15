@@ -18,7 +18,7 @@ Route::post('/quickscan', QuickscanController::class)
 
 // Test CompanyInfo client
 Route::get('/debug/companyinfo/search', function (
-    \App\Services\CompanyInfo\CompanyInfoClient $client
+    App\Services\CompanyInfo\CompanyInfoClient $client
 ) {
     return $client->search(
         request('name'),

@@ -3,6 +3,7 @@
 namespace App\Services\CompanyInfo;
 
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 
 class CompanyInfoClient
 {
@@ -59,11 +60,11 @@ class CompanyInfoClient
         $response = Http::timeout(15)->get($url);
 
         if ($response->failed()) {
-            throw new \RuntimeException('CompanyInfo request failed');
+            throw new RuntimeException('CompanyInfo request failed');
         }
 
         if ($errorCode = $response->header('X-WS-ErrorCode')) {
-            throw new \RuntimeException("CompanyInfo error: {$errorCode}");
+            throw new RuntimeException("CompanyInfo error: $errorCode");
         }
 
         // Test CompanyInfo client > log raw XML
