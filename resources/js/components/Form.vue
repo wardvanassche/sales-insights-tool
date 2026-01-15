@@ -12,6 +12,11 @@ const form = reactive({
 });
 
 const submit = () => {
+    if (!form.company_name && !form.company_url) {
+        alert('Vul minimaal een bedrijfsnaam of een URL in.');
+        return;
+    }
+
     emit('submit', { ...form });
 };
 </script>
@@ -26,20 +31,30 @@ const submit = () => {
                         v-model="form.company_name"
                         type="text"
                         placeholder="Voer een bedrijfsnaam in"
-                        required
                     />
                 </div>
+                <p
+                    v-if="$page.props.errors.company_name"
+                    class="text-sm text-red-500"
+                >
+                    {{ $page.props.errors.company_name }}
+                </p>
             </div>
             <div class="sm:col-span-2">
                 <Label for="url" class="block text-sm/6"> URL </Label>
                 <div class="mt-2.5">
                     <Input
                         v-model="form.company_url"
-                        id="url"
+                        type="url"
                         placeholder="Voer een url in"
-                        required
                     />
                 </div>
+                <p
+                    v-if="$page.props.errors.company_url"
+                    class="mt-1 text-sm text-red-500"
+                >
+                    {{ $page.props.errors.company_url }}
+                </p>
             </div>
         </div>
         <div class="mt-10 flex justify-start">

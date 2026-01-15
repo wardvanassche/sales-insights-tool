@@ -2,23 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CompanyInfo\CompanyInfoClient;
+use App\Services\Llm\Ollama;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class QuickscanController extends Controller
 {
-    public function __invoke(Request $request)
+    public function __invoke(
+        Request           $request,
+        Ollama            $llm,
+        CompanyInfoClient $companyInfo,
+    )
     {
+        // Input validatie
         $data = $request->validate([
-            'company_name' => ['required', 'string'],
-            'company_url'  => ['required', 'url'],
+            'company_name' => [
+                'nullable',
+                'string',
+                'required_without:company_url'
+            ],
+            'company_url' => [
+                'nullable',
+                'url',
+                'required_without:company_name'
+            ],
         ]);
 
-        // 🔍 tijdelijke check
-        // logger()->info('Quickscan input', $data);
+        // Zoeken (CompanyInfo)
+        $company = $companyInfo->searchAndPickMain(
+            $data['company_name'] ?? null,
+            $data['company_url'] ?? null,
+        );
 
-        return response()->json([
-            'status' => 'ok',
-            'input' => $data,
+        if (!$company) {
+            return Inertia::render('Quickscan', [
+                'error' => 'Geen bedrijf gevonden met deze input.',
+            ]);
+        }
+
+        // LLM analyse
+        $analysis = $llm->analyze($company);
+
+        // Response terug naar UI
+        return Inertia::render('Quickscan', [
+            'company' => $company,
+            'analysis' => $analysis,
         ]);
     }
 }

@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const props = defineProps<{
+    analysis?: string;
+}>();
+
 import Form from '@/components/Form.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { quickscan } from '@/routes';
@@ -23,7 +27,7 @@ const handleSubmit = (data) => {
 
     form.post('/quickscan');
 
-    console.log(data)
+    console.log(data);
 };
 </script>
 
@@ -40,15 +44,20 @@ const handleSubmit = (data) => {
 
             <div class="flex-1">
                 <div
-                    class="flex h-full flex-col rounded-xl border bg-card p-6 shadow-sm"
+                    v-if="props.analysis"
+                    class="flex-1 overflow-auto rounded-lg bg-muted/40 p-4 text-sm"
                 >
-                    <h1 class="mb-4 font-semibold text-foreground">Analyse</h1>
-
-                    <div
-                        class="flex flex-1 items-center justify-center rounded-lg bg-muted/40 text-muted-foreground"
+                    <pre class="whitespace-pre-wrap">
+        {{ props.analysis }}
+    </pre
                     >
-                        Start een quickscan om inzichten te bekijken
-                    </div>
+                </div>
+
+                <div
+                    v-else
+                    class="flex flex-1 items-center justify-center rounded-lg bg-muted/40 text-muted-foreground"
+                >
+                    Start een quickscan om inzichten te bekijken
                 </div>
             </div>
         </div>
