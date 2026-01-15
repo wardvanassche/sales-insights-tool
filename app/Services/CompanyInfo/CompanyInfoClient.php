@@ -28,7 +28,7 @@ class CompanyInfoClient
     }
 
     // Search with method dutchBusinessSearch
-    private function search(string $companyName = null, string $companyUrl = null): array
+    public function search(string $companyName = null, string $companyUrl = null): array
     {
         $params = [
             '',                     // dossier_number
