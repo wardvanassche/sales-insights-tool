@@ -18,18 +18,38 @@ class CompanyInfoClient
         $this->password = config('services.companyinfo.password');
     }
 
-    public function searchAndPickMain(
+    public function getCompanyProfile(
         ?string $companyName = null,
         ?string $companyUrl = null,
     ): ?array
     {
+        // Search company
         $results = $this->search($companyName, $companyUrl);
 
-        return $this->findMainEstablishment($results);
+        // Get main establishment
+        $company = $this->findMainEstablishment($results);
+
+        if (!$company) {
+            throw new RuntimeException('No business found');
+        }
+
+        // Get dossier
+        $dossier = $this->getDossierV3(
+            $company['dossier_number'],
+            $company['establishment_number']
+        );
+
+        // Merge search + dossier
+        return array_merge(
+            $company,
+            [
+                'dossier' => $dossier,
+            ]
+        );
     }
 
     // Search with method dutchBusinessSearch
-    public function search(string $companyName = null, string $companyUrl = null): array
+    private function search(string $companyName = null, string $companyUrl = null): array
     {
         $params = [
             '',                     // dossier_number
@@ -69,11 +89,21 @@ class CompanyInfoClient
 
         // Test CompanyInfo client > log raw XML
         logger()->debug('CompanyInfo RAW XML', [
+            'method' => $method,
             'url' => $url,
             'response' => $response->body(),
         ]);
 
-        return $this->parseDutchBusinessSearch($response->body());
+        return match ($method) {
+            'dutchBusinessSearch' =>
+            $this->parseDutchBusinessSearch($response->body()),
+
+            'dutchBusinessGetDossierV3' =>
+            $this->parseDutchBusinessGetDossierV3($response->body()),
+
+            default =>
+            throw new RuntimeException("No parser for method {$method}"),
+        };
     }
 
     // Build url
@@ -135,4 +165,58 @@ class CompanyInfoClient
         return $main ?? $results[0];
     }
 
+    // GetDossierV3 method
+    private function getDossierV3(
+        string $dossierNumber,
+        string $establishmentNumber
+    ): array
+    {
+        $params = [
+            $dossierNumber,
+            $establishmentNumber,
+        ];
+
+        return $this->call('dutchBusinessGetDossierV3', $params);
+    }
+
+    private function parseDutchBusinessGetDossierV3(string $xmlString): array
+    {
+        $xml = new \SimpleXMLElement($xmlString);
+
+        if (!isset($xml->result)) {
+            return [];
+        }
+
+        $result = $xml->result;
+
+        return [
+            'dossier_number'  => (string) ($result->dossier_number ?? ''),
+            'legal_name'      => (string) ($result->legal_name ?? ''),
+            'trade_name'      => (string) ($result->trade_name ?? ''),
+            'legal_form'      => (string) ($result->legal_form ?? ''),
+            'status'          => (string) ($result->status ?? ''),
+            'foundation_date' => (string) ($result->foundation_date ?? ''),
+
+            // SBI / Branche
+            'sbi_codes' => $this->parseSbiCodes($result->sbi_codes ?? null),
+        ];
+    }
+
+    private function parseSbiCodes($sbiNode): array
+    {
+        if (!$sbiNode || !isset($sbiNode->sbi)) {
+            return [];
+        }
+
+        $codes = [];
+
+        foreach ($sbiNode->sbi as $sbi) {
+            $codes[] = [
+                'code'        => (string) $sbi->code,
+                'description' => (string) $sbi->description,
+            ];
+        }
+
+        return $codes;
+    }
 }

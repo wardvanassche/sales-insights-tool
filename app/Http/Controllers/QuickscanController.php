@@ -29,24 +29,24 @@ class QuickscanController extends Controller
             ],
         ]);
 
-        // Zoeken (CompanyInfo)
-        $company = $companyInfo->searchAndPickMain(
+        // Search (CompanyInfo)
+        $companyProfile = $companyInfo->getCompanyProfile(
             $data['company_name'] ?? null,
             $data['company_url'] ?? null,
         );
 
-        if (!$company) {
+        // Return error when no result is found
+        if (!$companyProfile) {
             return Inertia::render('Quickscan', [
                 'error' => 'Geen bedrijf gevonden met deze input.',
             ]);
         }
 
         // LLM analyse
-        $analysis = $llm->analyze($company);
+        $analysis = $llm->analyze($companyProfile);
 
-        // Response terug naar UI
+        // Response to UI
         return Inertia::render('Quickscan', [
-            'company' => $company,
             'analysis' => $analysis,
         ]);
     }

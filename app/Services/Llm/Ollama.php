@@ -8,13 +8,18 @@ use RuntimeException;
 class Ollama
 {
     // Analyse company based on API data
-    public function analyze(array $company): string
+    public function analyze(array $companyProfile): string
     {
-        if (empty($company)) {
+        if (empty($companyProfile)) {
             throw new RuntimeException("No company data provided to LLM");
         }
 
-        $prompt = $this->buildPrompt($company);
+        $companyJson = json_encode(
+            $companyProfile,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        );
+
+        $prompt = $this->buildPrompt($companyJson);
 
         $response = Http::timeout(60)
             ->post(config('services.ollama.base_url'), [
@@ -27,34 +32,41 @@ class Ollama
             throw new RuntimeException('Ollama request failed');
         }
 
+        // Log response from Ollama in laravel.log for debugging
+        logger()->debug('Ollama raw response', [
+            'body' => $response->json(),
+        ]);
+
         return $response->json('response') ?? '';
     }
 
     // Prompt engineering
-    private function buildPrompt(array $company): string
+    private function buildPrompt(string $companyJson): string
     {
-        $context = collect($company)
-            ->map(fn ($value, $key) => strtoupper($key) . ': ' . $value)
-            ->implode("\n");
-
         return <<<PROMPT
 
 You are an experienced B2B sales consultant.
 
-Analyze the company described below and provide:
+You are given structured company data from official business registries
+(Chamber of Commerce, establishment data, legal information).
 
-1. What is the name of the company?
-2. What is the dossier number of the company?
-3. What is the establishment number of this company?
-4. Is this a main establishment or not?
-5. In which city is the company located?
-6. What type of company is it?
-7. In which industry does the company operate?
+The data may be incomplete or not contain financial figures such as revenue.
+Do NOT invent facts that are not present in the data.
 
-Company data:
-{$context}
+Your task:
+1. Summarize the company in 2–3 sentences
+2. Give technical data if provided such as revenue and number of employees.
+3. Identify potential commercial opportunities
+4. Identify potential pain points or risks
+5. Suggest concrete sales angles or questions to explore
 
-Respond concisely and practically. Focus on insights that are directly useful for a B2B sales professional.
+Company data (JSON):
+{$companyJson}
+
+You may analyze and reason internally in English to ensure high-quality insights.
+However, your FINAL ANSWER must be written entirely in Dutch.
+
+Respond clearly and practically, aimed at a B2B sales professional.
 
 PROMPT;
     }
