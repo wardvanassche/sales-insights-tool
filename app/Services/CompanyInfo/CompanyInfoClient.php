@@ -190,12 +190,21 @@ class CompanyInfoClient
         $result = $xml->result;
 
         return [
-            'dossier_number'  => (string) ($result->dossier_number ?? ''),
-            'legal_name'      => (string) ($result->legal_name ?? ''),
-            'trade_name'      => (string) ($result->trade_name ?? ''),
-            'legal_form'      => (string) ($result->legal_form ?? ''),
-            'status'          => (string) ($result->status ?? ''),
+            'dossier_number' => (string) ($xml->dossier_number ?? ''),
+            'establishment_number' => (string) ($xml->establishment_number ?? ''),
+            'legal_name' => (string) ($xml->legal_name ?? ''),
+            'trade_name_full' => (string) ($xml->trade_name_full ?? ''),
+            'domain_name' => (string) ($xml->domain_name ?? ''),
+
+            'legal_form_text' => (string) ($xml->legal_form_text ?? ''),
+            'status' => (string) ($xml->status ?? ''),
+
             'foundation_date' => (string) ($result->foundation_date ?? ''),
+
+            'personnel' => [
+                'personnel_ci' => (int) ($xml->personnel_ci ?? 0),
+                'reference_year' => (string) ($xml->personnel_reference_date->year ?? ''),
+            ],
 
             // SBI / Branche
             'sbi_codes' => $this->parseSbiCodes($result->sbi_codes ?? null),

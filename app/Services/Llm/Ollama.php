@@ -21,7 +21,7 @@ class Ollama
 
         $prompt = $this->buildPrompt($companyJson);
 
-        $response = Http::timeout(60)
+        $response = Http::timeout(120)
             ->post(config('services.ollama.base_url'), [
             'model'  => config('services.ollama.model'),
             'prompt' => $prompt,
@@ -47,26 +47,29 @@ class Ollama
 
 You are an experienced B2B sales consultant.
 
-You are given structured company data from official business registries
-(Chamber of Commerce, establishment data, legal information).
+You may reason internally in English, but your FINAL output must be in Dutch.
 
-The data may be incomplete or not contain financial figures such as revenue.
-Do NOT invent facts that are not present in the data.
+Rules:
+- Only use facts that are present in the JSON.
+- If a field exists, you MUST prefer it over assumptions.
+- If financial data exists (financials / annual_financial_statement_summary), you MUST mention it.
+- If a field is missing, say "Niet beschikbaar in de data".
 
-Your task:
-1. Summarize the company in 2–3 sentences
-2. Give technical data if provided such as revenue and number of employees.
-3. Identify potential commercial opportunities
-4. Identify potential pain points or risks
-5. Suggest concrete sales angles or questions to explore
+Task:
+1) Maak een korte bedrijfssamenvatting (2–3 zinnen)
+2) Geef een sectie "Feiten uit de data" met bullets:
+   - Bedrijfsnaam
+   - Dossiernummer
+   - Vestigingsplaats
+   - SBI/branche (primary + secondary)
+   - Personeelsindicatie (als aanwezig)
+   - Financiële cijfers (omzet/winst/activa + jaartal) (als aanwezig)
+3) Kansen voor sales (3–5 bullets, gekoppeld aan de feiten)
+4) Pijnpunten/risico’s (3–5 bullets, gekoppeld aan de feiten)
+5) 5 concrete discovery-vragen
 
 Company data (JSON):
 {$companyJson}
-
-You may analyze and reason internally in English to ensure high-quality insights.
-However, your FINAL ANSWER must be written entirely in Dutch.
-
-Respond clearly and practically, aimed at a B2B sales professional.
 
 PROMPT;
     }

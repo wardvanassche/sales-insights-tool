@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 const props = defineProps<{
     analysis?: string;
 }>();
@@ -8,6 +10,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { quickscan } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
+import MarkdownIt from 'markdown-it';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,6 +32,14 @@ const handleSubmit = (data) => {
 
     console.log(data);
 };
+
+const md = new MarkdownIt({
+    html: false,
+    linkify: true,
+    breaks: true,
+});
+
+const renderedAnalysis = computed(() => md.render(props.analysis));
 </script>
 
 <template>
@@ -44,13 +55,13 @@ const handleSubmit = (data) => {
 
             <div class="flex-1">
                 <div
-                    v-if="props.analysis"
+                    v-if="analysis"
                     class="flex-1 overflow-auto rounded-lg bg-muted/40 p-4 text-sm"
                 >
-                    <pre class="whitespace-pre-wrap">
-        {{ props.analysis }}
-    </pre
-                    >
+                    <div
+                        v-html="renderedAnalysis"
+                        class="prose max-w-none"
+                    ></div>
                 </div>
 
                 <div
