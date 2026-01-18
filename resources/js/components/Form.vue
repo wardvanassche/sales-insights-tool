@@ -57,7 +57,7 @@ const submit = () => {
                 </p>
             </div>
         </div>
-        <div class="mt-10 flex justify-start">
+        <div class="mt-10 flex">
             <Button type="submit"> Quickscan </Button>
         </div>
     </form>

@@ -16,15 +16,5 @@ Route::get('/quickscan', function () {
 Route::post('/quickscan', QuickscanController::class)
     ->name('quickscan.store');
 
-// Test CompanyInfo client
-Route::get('/debug/companyinfo/search', function (
-    App\Services\CompanyInfo\CompanyInfoClient $client
-) {
-    return $client->search(
-        request('name'),
-        request('url')
-    );
-});
-
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
