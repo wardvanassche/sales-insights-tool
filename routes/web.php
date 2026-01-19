@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\QuickscanController;
+use App\Services\Llm\Ollama;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

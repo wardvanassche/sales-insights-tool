@@ -183,49 +183,15 @@ class CompanyInfoClient
     {
         $xml = new \SimpleXMLElement($xmlString);
 
-        if (!isset($xml->result)) {
-            return [];
-        }
-
-        $result = $xml->result;
-
         return [
-            'dossier_number' => (string) ($xml->dossier_number ?? ''),
-            'establishment_number' => (string) ($xml->establishment_number ?? ''),
-            'legal_name' => (string) ($xml->legal_name ?? ''),
-            'trade_name_full' => (string) ($xml->trade_name_full ?? ''),
-            'domain_name' => (string) ($xml->domain_name ?? ''),
-
-            'legal_form_text' => (string) ($xml->legal_form_text ?? ''),
-            'status' => (string) ($xml->status ?? ''),
-
-            'foundation_date' => (string) ($result->foundation_date ?? ''),
-
-            'personnel' => [
-                'personnel_ci' => (int) ($xml->personnel_ci ?? 0),
-                'reference_year' => (string) ($xml->personnel_reference_date->year ?? ''),
+            'identity' => [
+                'legal_name' => (string) ($xml->legal_name ?? ''),
+                'legal_form' => (string) ($xml->legal_form_text ?? ''),
+                'city'       => (string) ($xml->establishment_address->official->city ?? ''),
+                'founded'    => (string) ($xml->founding_date->year ?? ''),
             ],
 
-            // SBI / Branche
-            'sbi_codes' => $this->parseSbiCodes($result->sbi_codes ?? null),
+            'industry' => (string) ($xml->primary_sbi_code_text ?? ''),
         ];
-    }
-
-    private function parseSbiCodes($sbiNode): array
-    {
-        if (!$sbiNode || !isset($sbiNode->sbi)) {
-            return [];
-        }
-
-        $codes = [];
-
-        foreach ($sbiNode->sbi as $sbi) {
-            $codes[] = [
-                'code'        => (string) $sbi->code,
-                'description' => (string) $sbi->description,
-            ];
-        }
-
-        return $codes;
     }
 }

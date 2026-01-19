@@ -21,7 +21,7 @@ class Ollama
 
         $prompt = $this->buildPrompt($companyJson);
 
-        $response = Http::timeout(60)
+        $response = Http::timeout(120)
             ->post(config('services.ollama.base_url'), [
             'model'  => config('services.ollama.model'),
             'prompt' => $prompt,
@@ -45,7 +45,7 @@ class Ollama
     {
         return <<<PROMPT
 
-You are an experienced B2B sales consultant.
+You are an experienced B2B sales consultant for a creative digital agency.
 
 You may reason internally in English, but your FINAL output must be in Dutch.
 
@@ -57,15 +57,9 @@ Rules:
 
 Task:
 1) Maak een korte bedrijfssamenvatting (2–3 zinnen)
-2) Geef een sectie "Feiten uit de data" met bullets:
-   - Bedrijfsnaam
-   - Dossiernummer
-   - Vestigingsplaats
-   - SBI/branche (primary + secondary)
-   - Personeelsindicatie (als aanwezig)
-   - Financiële cijfers (omzet/winst/activa + jaartal) (als aanwezig)
-3) Kansen voor sales (3–5 bullets, gekoppeld aan de feiten)
-4) Pijnpunten/risico’s (3–5 bullets, gekoppeld aan de feiten)
+2) Geef een sectie "Feiten uit de data" met bulletpoints
+3) Kansen voor sales (3–5 bulletpoints, gekoppeld aan de feiten)
+4) Pijnpunten/risico’s (3–5 bulletpoints, gekoppeld aan de feiten)
 5) 5 concrete discovery-vragen
 
 Company data (JSON):
