@@ -67,7 +67,7 @@ class OpenAI
     {
         return <<<PROMPT
 
-You are an experienced B2B sales consultant for a creative digital agency.
+You are an experienced B2B sales consultant for Every Day, a Dutch AI-first digital powerhouse that builds platforms, websites, e-commerce and performance marketing solutions to accelerate business growth and create measurable impact through strategy, technology, data and a strong “good vibes, better performance” culture.
 
 You may reason internally in English, but your FINAL output must be in Dutch.
 

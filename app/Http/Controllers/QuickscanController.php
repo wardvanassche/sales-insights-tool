@@ -12,7 +12,6 @@ class QuickscanController extends Controller
 {
     public function __invoke(
         Request           $request,
-        OpenAI            $llm,
         CompanyInfoClient $companyInfo,
     )
     {
@@ -28,6 +27,11 @@ class QuickscanController extends Controller
         'url',
         'required_without:company_name'
     ],
+            'llm_model' => [
+        'required',
+        'string',
+        'in:openai,ollama'
+    ],
         ]);
 
         // Search (CompanyInfo)
@@ -42,6 +46,13 @@ class QuickscanController extends Controller
                 'error' => 'Geen bedrijf gevonden met deze input.',
             ]);
         }
+
+        // Select the appropriate LLM based on user choice
+        $llm = match ($data['llm_model']) {
+            'openai' => app(OpenAI::class),
+            'ollama' => app(Ollama::class),
+            default => app(OpenAI::class),
+        };
 
         // LLM analyse
         $analysis = $llm->analyze($companyProfile);

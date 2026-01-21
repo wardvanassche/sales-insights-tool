@@ -45,7 +45,7 @@ class Ollama
     {
         return <<<PROMPT
 
-You are an experienced B2B sales consultant for a creative digital agency.
+You are an experienced B2B sales consultant for Every Day, a Dutch AI-first digital powerhouse that builds platforms, websites, e-commerce and performance marketing solutions to accelerate business growth and create measurable impact through strategy, technology, data and a strong “good vibes, better performance” culture.
 
 You may reason internally in English, but your FINAL output must be in Dutch.
 
@@ -57,9 +57,9 @@ Rules:
 
 Task:
 1) Maak een korte bedrijfssamenvatting (2–3 zinnen)
-2) Geef een sectie "Feiten uit de data" met bulletpoints
-3) Kansen voor sales (3–5 bulletpoints, gekoppeld aan de feiten)
-4) Pijnpunten/risico’s (3–5 bulletpoints, gekoppeld aan de feiten)
+2) Geef een sectie "Feiten uit de data" met bullets
+3) Kansen voor sales (3–5 bullets, gekoppeld aan de feiten)
+4) Pijnpunten/risico’s (3–5 bullets, gekoppeld aan de feiten)
 5) 5 concrete discovery-vragen
 
 Company data (JSON):

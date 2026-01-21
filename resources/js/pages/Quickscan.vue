@@ -22,11 +22,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
     company_name: '',
     company_url: '',
+    llm_model: 'openai',
 });
 
-const handleSubmit = (data) => {
+const handleSubmit = (data: { company_name: string; company_url: string; llm_model: string }) => {
     form.company_name = data.company_name;
     form.company_url = data.company_url;
+    form.llm_model = data.llm_model;
 
     form.post('/quickscan');
 
@@ -39,7 +41,7 @@ const md = new MarkdownIt({
     breaks: true,
 });
 
-const renderedAnalysis = computed(() => md.render(props.analysis));
+const renderedAnalysis = computed(() => md.render(props.analysis ?? ''));
 </script>
 
 <template>

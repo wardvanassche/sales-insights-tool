@@ -9,6 +9,7 @@ const emit = defineEmits(['submit']);
 const form = reactive({
     company_name: '',
     company_url: '',
+    llm_model: 'openai',
 });
 
 const submit = () => {
@@ -55,6 +56,21 @@ const submit = () => {
                 >
                     {{ $page.props.errors.company_url }}
                 </p>
+            </div>
+            <div class="sm:col-span-2">
+                <Label for="llm_model" class="block text-sm/6"> Model </Label>
+                <div class="mt-2.5">
+                    <select
+                        v-model="form.llm_model"
+                        id="llm_model"
+                        class="block w-full rounded-md border px-3 py-2 shadow-sm h-9 dark:bg-input/30
+                        focus-visible:ring-[1px] focus-visible:ring-[#0A3D62]
+                        aria-invalid:border-destructive aria-invalid:ring-destructive/20 sm:text-sm dark:aria-invalid:ring-destructive/40"
+                    >
+                        <option value="openai">OpenAI (GPT-4 Mini)</option>
+                        <option value="ollama">Ollama (Lokaal)</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="mt-10 flex">
