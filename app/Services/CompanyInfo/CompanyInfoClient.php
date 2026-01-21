@@ -133,15 +133,15 @@ class CompanyInfoClient
                 'dossier_number' => (string)($entry->dossier_number ?? ''),
                 'establishment_number' => (string)($entry->establishment_number ?? ''),
 
-//                'legal_name' => (string)$entry->legal_name,
-//                'trade_name' => (string)$entry->trade_name,
-//                'match_type' => (string)$entry->match_type,
-//
-//                'establishment_city' => (string)$entry->establishment_city,
-//                'establishment_street' => (string)$entry->establishment_street,
-//
-//                'correspondence_city' => (string)$entry->correspondence_city,
-//                'correspondence_street' => (string)$entry->correspondence_street,
+                'legal_name' => (string)$entry->legal_name,
+                'trade_name' => (string)$entry->trade_name,
+                'match_type' => (string)$entry->match_type,
+
+                'establishment_city' => (string)$entry->establishment_city,
+                'establishment_street' => (string)$entry->establishment_street,
+
+                'correspondence_city' => (string)$entry->correspondence_city,
+                'correspondence_street' => (string)$entry->correspondence_street,
 
                 'is_main_establishment' => (bool)((int)$entry->indication_main_establishment === 1),
             ];
@@ -185,13 +185,49 @@ class CompanyInfoClient
 
         return [
             'identity' => [
-                'legal_name' => (string) ($xml->legal_name ?? ''),
-                'legal_form' => (string) ($xml->legal_form_text ?? ''),
-                'city'       => (string) ($xml->establishment_address->official->city ?? ''),
-                'founded'    => (string) ($xml->founding_date->year ?? ''),
+                'dossier_number' => (string) $xml->dossier_number,
+                'legal_name'     => (string) $xml->legal_name,
+                'legal_form'     => (string) $xml->legal_form_text,
+                'rsin'           => (string) $xml->rsin_number,
             ],
 
-            'industry' => (string) ($xml->primary_sbi_code_text ?? ''),
+            'contact' => [
+                'phone'   => (string) $xml->telephone_number,
+                'website' => (string) $xml->domain_name,
+            ],
+
+            'company_size' => [
+                'personnel' => (int) $xml->personnel_ci ?: (int) $xml->personnel,
+            ],
+
+            'financials' => [
+                'year' => (int) ($xml->annual_financial_statement_summary->year ?? 0),
+
+                'revenue' => [
+                    'amount'   => (float) ($xml->annual_financial_statement_summary->turnover->amount ?? 0),
+                    'currency' => (string) ($xml->annual_financial_statement_summary->turnover->currency ?? 'EUR'),
+                ],
+
+                'profit' => [
+                    'amount'   => (float) ($xml->annual_financial_statement_summary->profit->amount ?? 0),
+                    'currency' => (string) ($xml->annual_financial_statement_summary->profit->currency ?? 'EUR'),
+                ],
+
+                'assets' => [
+                    'amount'   => (float) ($xml->annual_financial_statement_summary->assets->amount ?? 0),
+                    'currency' => (string) ($xml->annual_financial_statement_summary->assets->currency ?? 'EUR'),
+                ],
+            ],
+
+            'capital' => [
+                'paid_up' => (float) ($xml->paid_up_share_capital ?? 0),
+                'issued'  => (float) ($xml->issued_share_capital ?? 0),
+            ],
+
+            'risk' => [
+                'bankrupt' => ((int) $xml->indication_bankruptcy === 1),
+                'active'   => ((int) $xml->indication_economically_active === 1),
+            ],
         ];
     }
 }

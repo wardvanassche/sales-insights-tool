@@ -10,9 +10,6 @@ class OpenAI
     private const API_URL = 'https://api.openai.com/v1/chat/completions';
     private const MODEL = 'gpt-4o-mini';
 
-    /**
-     * Analyse company based on API data using OpenAI GPT-4o mini
-     */
     public function analyze(array $companyProfile): string
     {
         if (empty($companyProfile)) {
@@ -66,14 +63,26 @@ class OpenAI
         return $content;
     }
 
-    /**
-     * Prompt engineering - same as Ollama for consistency
-     */
     private function buildPrompt(string $companyJson): string
     {
         return <<<PROMPT
 
-Geef een samenvatting van de bedrijfsdata die je gekregen hebt.
+You are an experienced B2B sales consultant for a creative digital agency.
+
+You may reason internally in English, but your FINAL output must be in Dutch.
+
+Rules:
+- Only use facts that are present in the JSON.
+- If a field exists, you MUST prefer it over assumptions.
+- If financial data exists (financials / annual_financial_statement_summary), you MUST mention it.
+- If a field is missing, say "Niet beschikbaar in de data".
+
+Task:
+1) Maak een korte bedrijfssamenvatting (2–3 zinnen)
+2) Geef een sectie "Feiten uit de data" met bulletpoints
+3) Kansen voor sales (3–5 bulletpoints, gekoppeld aan de feiten)
+4) Pijnpunten/risico’s (3–5 bulletpoints, gekoppeld aan de feiten)
+5) 5 concrete discovery-vragen
 
 Company data (JSON):
 {$companyJson}
