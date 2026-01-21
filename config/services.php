@@ -40,6 +40,10 @@ return [
         'model' => env('OLLAMA_MODEL'),
     ],
 
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
     'companyinfo' => [
         'endpoint' => env('COMPANYINFO_RPC_ENDPOINT'),
         'fallback' => env('COMPANYINFO_RPC_FALLBACK'),

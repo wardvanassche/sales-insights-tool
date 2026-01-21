@@ -22,11 +22,13 @@ const breadcrumbs: BreadcrumbItem[] = [
 const form = useForm({
     company_name: '',
     company_url: '',
+    llm_model: 'openai',
 });
 
-const handleSubmit = (data) => {
+const handleSubmit = (data: { company_name: string; company_url: string; llm_model: string }) => {
     form.company_name = data.company_name;
     form.company_url = data.company_url;
+    form.llm_model = data.llm_model;
 
     form.post('/quickscan');
 
@@ -34,12 +36,27 @@ const handleSubmit = (data) => {
 };
 
 const md = new MarkdownIt({
-    html: false,
+    html: true,
     linkify: true,
     breaks: true,
+    typographer: true,
 });
 
-const renderedAnalysis = computed(() => md.render(props.analysis));
+// Enable list and other plugins
+md.enable(['table', 'strikethrough']);
+
+// Custom rendering for better spacing
+md.renderer.rules.bullet_list_open = () => '<ul class="list-disc">';
+md.renderer.rules.ordered_list_open = () => '<ol class="list-decimal">';
+md.renderer.rules.heading_open = (tokens, idx) => {
+    const level = tokens[idx].tag;
+    const classes = level === 'h1' ? 'text-lg font-semibold mt-6 mb-3' :
+                   level === 'h2' ? 'text-base font-semibold mt-5 mb-3 border-b pb-2' :
+                   'text-sm font-semibold mt-4 mb-2';
+    return `<${level} class="${classes}">`;
+};
+
+const renderedAnalysis = computed(() => md.render(props.analysis ?? ''));
 </script>
 
 <template>
@@ -56,11 +73,11 @@ const renderedAnalysis = computed(() => md.render(props.analysis));
             <div class="flex-1">
                 <div
                     v-if="analysis"
-                    class="flex-1 overflow-auto rounded-lg bg-muted/40 p-4 text-sm"
+                    class="flex-1 overflow-auto rounded-lg bg-muted/40 p-6 text-sm"
                 >
                     <div
                         v-html="renderedAnalysis"
-                        class="prose max-w-none"
+                        class="prose prose-sm max-w-none dark:prose-invert"
                     ></div>
                 </div>
 

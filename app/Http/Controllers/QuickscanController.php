@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CompanyInfo\CompanyInfoClient;
 use App\Services\Llm\Ollama;
+use App\Services\Llm\OpenAI;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,22 +12,26 @@ class QuickscanController extends Controller
 {
     public function __invoke(
         Request           $request,
-        Ollama            $llm,
         CompanyInfoClient $companyInfo,
     )
     {
         // Input validatie
         $data = $request->validate([
             'company_name' => [
-                'nullable',
-                'string',
-                'required_without:company_url'
-            ],
+        'nullable',
+        'string',
+        'required_without:company_url'
+    ],
             'company_url' => [
-                'nullable',
-                'url',
-                'required_without:company_name'
-            ],
+        'nullable',
+        'url',
+        'required_without:company_name'
+    ],
+            'llm_model' => [
+        'required',
+        'string',
+        'in:openai,ollama'
+    ],
         ]);
 
         // Search (CompanyInfo)
@@ -41,6 +46,13 @@ class QuickscanController extends Controller
                 'error' => 'Geen bedrijf gevonden met deze input.',
             ]);
         }
+
+        // Select the appropriate LLM based on user choice
+        $llm = match ($data['llm_model']) {
+            'openai' => app(OpenAI::class),
+            'ollama' => app(Ollama::class),
+            default => app(OpenAI::class),
+        };
 
         // LLM analyse
         $analysis = $llm->analyze($companyProfile);
