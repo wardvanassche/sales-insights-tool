@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\CompanyInfo\CompanyInfoClient;
 use App\Services\Llm\Ollama;
+use App\Services\Llm\OpenAI;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -11,22 +12,22 @@ class QuickscanController extends Controller
 {
     public function __invoke(
         Request           $request,
-        Ollama            $llm,
+        OpenAI            $llm,
         CompanyInfoClient $companyInfo,
     )
     {
         // Input validatie
         $data = $request->validate([
             'company_name' => [
-                'nullable',
-                'string',
-                'required_without:company_url'
-            ],
+        'nullable',
+        'string',
+        'required_without:company_url'
+    ],
             'company_url' => [
-                'nullable',
-                'url',
-                'required_without:company_name'
-            ],
+        'nullable',
+        'url',
+        'required_without:company_name'
+    ],
         ]);
 
         // Search (CompanyInfo)

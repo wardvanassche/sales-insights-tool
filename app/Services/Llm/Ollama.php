@@ -21,7 +21,7 @@ class Ollama
 
         $prompt = $this->buildPrompt($companyJson);
 
-        $response = Http::timeout(120)
+        $response = Http::timeout(60)
             ->post(config('services.ollama.base_url'), [
             'model'  => config('services.ollama.model'),
             'prompt' => $prompt,

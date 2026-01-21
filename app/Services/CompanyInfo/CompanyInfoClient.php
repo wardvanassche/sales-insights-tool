@@ -77,7 +77,7 @@ class CompanyInfoClient
             array_merge([$this->username, $this->password], $params)
         );
 
-        $response = Http::timeout(15)->get($url);
+        $response = Http::timeout(30)->get($url);
 
         if ($response->failed()) {
             throw new RuntimeException('CompanyInfo request failed');
@@ -133,15 +133,15 @@ class CompanyInfoClient
                 'dossier_number' => (string)($entry->dossier_number ?? ''),
                 'establishment_number' => (string)($entry->establishment_number ?? ''),
 
-                'legal_name' => (string)$entry->legal_name,
-                'trade_name' => (string)$entry->trade_name,
-                'match_type' => (string)$entry->match_type,
-
-                'establishment_city' => (string)$entry->establishment_city,
-                'establishment_street' => (string)$entry->establishment_street,
-
-                'correspondence_city' => (string)$entry->correspondence_city,
-                'correspondence_street' => (string)$entry->correspondence_street,
+//                'legal_name' => (string)$entry->legal_name,
+//                'trade_name' => (string)$entry->trade_name,
+//                'match_type' => (string)$entry->match_type,
+//
+//                'establishment_city' => (string)$entry->establishment_city,
+//                'establishment_street' => (string)$entry->establishment_street,
+//
+//                'correspondence_city' => (string)$entry->correspondence_city,
+//                'correspondence_street' => (string)$entry->correspondence_street,
 
                 'is_main_establishment' => (bool)((int)$entry->indication_main_establishment === 1),
             ];
