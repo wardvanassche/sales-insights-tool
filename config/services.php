@@ -35,4 +35,19 @@ return [
         ],
     ],
 
+    'ollama' => [
+        'base_url' => env('OLLAMA_BASE_URL'),
+        'model' => env('OLLAMA_MODEL'),
+    ],
+
+    'openai' => [
+        'api_key' => env('OPENAI_API_KEY'),
+    ],
+
+    'companyinfo' => [
+        'endpoint' => env('COMPANYINFO_RPC_ENDPOINT'),
+        'fallback' => env('COMPANYINFO_RPC_FALLBACK'),
+        'username' => env('COMPANYINFO_USERNAME'),
+        'password' => env('COMPANYINFO_PASSWORD'),
+    ],
 ];

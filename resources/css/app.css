@@ -96,7 +96,7 @@
     --card-foreground: hsl(0 0% 3.9%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
+    --primary: #0A3D62;
     --primary-foreground: hsl(0 0% 98%);
     --secondary: hsl(0 0% 92.1%);
     --secondary-foreground: hsl(0 0% 9%);
@@ -133,8 +133,8 @@
     --card-foreground: hsl(0 0% 98%);
     --popover: hsl(0 0% 3.9%);
     --popover-foreground: hsl(0 0% 98%);
-    --primary: hsl(0 0% 98%);
-    --primary-foreground: hsl(0 0% 9%);
+    --primary: #0A3D62;
+    --primary-foreground: hsl(0 0% 98%);
     --secondary: hsl(0 0% 14.9%);
     --secondary-foreground: hsl(0 0% 98%);
     --muted: hsl(0 0% 16.08%);
@@ -170,3 +170,115 @@
         @apply bg-background text-foreground;
     }
 }
+
+/* Prose styling for analysis output */
+@layer components {
+    .prose {
+        @apply text-base leading-relaxed;
+    }
+
+    .prose h1,
+    .prose h2,
+    .prose h3 {
+        @apply font-semibold mt-6 mb-3 text-foreground;
+    }
+
+    .prose h1 {
+        @apply text-lg;
+    }
+
+    .prose h2 {
+        @apply text-base border-b pb-2;
+    }
+
+    .prose h3 {
+        @apply text-sm;
+    }
+
+    .prose p {
+        @apply mb-4 text-foreground;
+    }
+
+    .prose ul,
+    .prose ol {
+        @apply mb-4 ml-6;
+    }
+
+    .prose ul {
+        @apply list-disc;
+    }
+
+    .prose ol {
+        @apply list-decimal;
+    }
+
+    .prose li {
+        @apply mb-2 text-foreground;
+    }
+
+    .prose li > p {
+        @apply mb-0;
+    }
+
+    .prose a {
+        @apply text-primary hover:underline;
+    }
+
+    .prose strong {
+        @apply font-semibold text-foreground;
+    }
+
+    .prose em {
+        @apply italic text-foreground;
+    }
+
+    .prose code {
+        @apply bg-muted px-2 py-1 rounded text-sm font-mono;
+    }
+
+    .prose pre {
+        @apply bg-muted p-4 rounded-lg overflow-auto mb-4;
+    }
+
+    .prose pre code {
+        @apply bg-transparent px-0 py-0;
+    }
+
+    .prose blockquote {
+        @apply border-l-4 border-primary pl-4 italic mb-4;
+    }
+
+    .prose hr {
+        @apply my-6 border-border;
+    }
+
+    .dark .prose {
+        @apply text-foreground;
+    }
+
+    .dark .prose h1,
+    .dark .prose h2,
+    .dark .prose h3 {
+        @apply text-foreground;
+    }
+
+    .dark .prose p,
+    .dark .prose li,
+    .dark .prose strong,
+    .dark .prose em {
+        @apply text-foreground;
+    }
+
+    .dark .prose a {
+        @apply text-primary hover:underline;
+    }
+
+    .dark .prose code {
+        @apply bg-muted text-foreground;
+    }
+
+    .dark .prose pre {
+        @apply bg-muted;
+    }
+}
+
