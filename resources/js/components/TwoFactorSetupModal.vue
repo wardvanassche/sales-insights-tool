@@ -232,6 +232,7 @@ watch(
                 <template v-else>
                     <Form
                         v-bind="confirm.form()"
+                        error-bag="confirmTwoFactorAuthentication"
                         reset-on-error
                         @finish="code = []"
                         @success="isOpen = false"
@@ -262,12 +263,7 @@ watch(
                                         />
                                     </PinInputGroup>
                                 </PinInput>
-                                <InputError
-                                    :message="
-                                        errors?.confirmTwoFactorAuthentication
-                                            ?.code
-                                    "
-                                />
+                                <InputError :message="errors?.code" />
                             </div>
 
                             <div class="flex w-full items-center space-x-5">

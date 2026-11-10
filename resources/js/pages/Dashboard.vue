@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/vue3';
-import { Button } from '@/components/ui/button';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -11,9 +11,9 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: dashboard().url,
     },
 ];
-defineProps({
-    user: Object,
-});
+defineProps<{
+    user: { name: string };
+}>();
 </script>
 
 <template>
@@ -21,7 +21,7 @@ defineProps({
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div
-            class="flex h-full flex-col items-center justify-center text-center mx-6"
+            class="mx-6 flex h-full flex-col items-center justify-center text-center"
         >
             <div
                 class="mb-6 flex h-28 w-28 items-center justify-center rounded-lg bg-primary/10 ring-2 ring-primary/20"
@@ -81,7 +81,7 @@ defineProps({
                     Wat levert een quickscan je op?
                 </h2>
 
-                <ul class="space-y-2 text-sm text-left text-muted-foreground">
+                <ul class="space-y-2 text-left text-sm text-muted-foreground">
                     <li>• Helder bedrijfsprofiel met kerngegevens</li>
                     <li>• Inzicht in commerciële kansen</li>
                     <li>• Mogelijke pijnpunten en risico’s</li>

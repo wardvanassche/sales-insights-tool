@@ -8,7 +8,9 @@ use RuntimeException;
 class CompanyInfoClient
 {
     private string $endpoint;
+
     private string $username;
+
     private string $password;
 
     public function __construct()
@@ -21,16 +23,15 @@ class CompanyInfoClient
     public function getCompanyProfile(
         ?string $companyName = null,
         ?string $companyUrl = null,
-    ): ?array
-    {
+    ): ?array {
         // Search company
         $results = $this->search($companyName, $companyUrl);
 
         // Get main establishment
         $company = $this->findMainEstablishment($results);
 
-        if (!$company) {
-            throw new RuntimeException('No business found');
+        if (! $company) {
+            return null;
         }
 
         // Get dossier
@@ -49,7 +50,7 @@ class CompanyInfoClient
     }
 
     // Search with method dutchBusinessSearch
-    private function search(string $companyName = null, string $companyUrl = null): array
+    private function search(?string $companyName = null, ?string $companyUrl = null): array
     {
         $params = [
             '',                     // dossier_number
@@ -87,22 +88,18 @@ class CompanyInfoClient
             throw new RuntimeException("CompanyInfo error: $errorCode");
         }
 
-        // Test CompanyInfo client > log raw XML
+        // Test CompanyInfo client > log raw XML (no URL: it contains the credentials)
         logger()->debug('CompanyInfo RAW XML', [
             'method' => $method,
-            'url' => $url,
             'response' => $response->body(),
         ]);
 
         return match ($method) {
-            'dutchBusinessSearch' =>
-            $this->parseDutchBusinessSearch($response->body()),
+            'dutchBusinessSearch' => $this->parseDutchBusinessSearch($response->body()),
 
-            'dutchBusinessGetDossierV3' =>
-            $this->parseDutchBusinessGetDossierV3($response->body()),
+            'dutchBusinessGetDossierV3' => $this->parseDutchBusinessGetDossierV3($response->body()),
 
-            default =>
-            throw new RuntimeException("No parser for method {$method}"),
+            default => throw new RuntimeException("No parser for method {$method}"),
         };
     }
 
@@ -110,11 +107,11 @@ class CompanyInfoClient
     private function buildUrl(string $endpoint, string $method, array $segments): string
     {
         $encoded = array_map(
-            fn($segment) => rawurlencode((string)$segment),
+            fn ($segment) => rawurlencode((string) $segment),
             $segments
         );
 
-        return rtrim($endpoint, '/') . '/' . $method . '/' . implode('/', $encoded);
+        return rtrim($endpoint, '/').'/'.$method.'/'.implode('/', $encoded);
     }
 
     // Parse xml results
@@ -122,7 +119,7 @@ class CompanyInfoClient
     {
         $xml = new \SimpleXMLElement($xmlString);
 
-        if (!isset($xml->results->entry)) {
+        if (! isset($xml->results->entry)) {
             return [];
         }
 
@@ -130,20 +127,20 @@ class CompanyInfoClient
 
         foreach ($xml->results->entry as $entry) {
             $results[] = [
-                'dossier_number' => (string)($entry->dossier_number ?? ''),
-                'establishment_number' => (string)($entry->establishment_number ?? ''),
+                'dossier_number' => (string) ($entry->dossier_number ?? ''),
+                'establishment_number' => (string) ($entry->establishment_number ?? ''),
 
-                'legal_name' => (string)$entry->legal_name,
-                'trade_name' => (string)$entry->trade_name,
-                'match_type' => (string)$entry->match_type,
+                'legal_name' => (string) $entry->legal_name,
+                'trade_name' => (string) $entry->trade_name,
+                'match_type' => (string) $entry->match_type,
 
-                'establishment_city' => (string)$entry->establishment_city,
-                'establishment_street' => (string)$entry->establishment_street,
+                'establishment_city' => (string) $entry->establishment_city,
+                'establishment_street' => (string) $entry->establishment_street,
 
-                'correspondence_city' => (string)$entry->correspondence_city,
-                'correspondence_street' => (string)$entry->correspondence_street,
+                'correspondence_city' => (string) $entry->correspondence_city,
+                'correspondence_street' => (string) $entry->correspondence_street,
 
-                'is_main_establishment' => (bool)((int)$entry->indication_main_establishment === 1),
+                'is_main_establishment' => (bool) ((int) $entry->indication_main_establishment === 1),
             ];
         }
 
@@ -169,8 +166,7 @@ class CompanyInfoClient
     private function getDossierV3(
         string $dossierNumber,
         string $establishmentNumber
-    ): array
-    {
+    ): array {
         $params = [
             $dossierNumber,
             $establishmentNumber,
@@ -186,13 +182,13 @@ class CompanyInfoClient
         return [
             'identity' => [
                 'dossier_number' => (string) $xml->dossier_number,
-                'legal_name'     => (string) $xml->legal_name,
-                'legal_form'     => (string) $xml->legal_form_text,
-                'rsin'           => (string) $xml->rsin_number,
+                'legal_name' => (string) $xml->legal_name,
+                'legal_form' => (string) $xml->legal_form_text,
+                'rsin' => (string) $xml->rsin_number,
             ],
 
             'contact' => [
-                'phone'   => (string) $xml->telephone_number,
+                'phone' => (string) $xml->telephone_number,
                 'website' => (string) $xml->domain_name,
             ],
 
@@ -204,29 +200,29 @@ class CompanyInfoClient
                 'year' => (int) ($xml->annual_financial_statement_summary->year ?? 0),
 
                 'revenue' => [
-                    'amount'   => (float) ($xml->annual_financial_statement_summary->turnover->amount ?? 0),
+                    'amount' => (float) ($xml->annual_financial_statement_summary->turnover->amount ?? 0),
                     'currency' => (string) ($xml->annual_financial_statement_summary->turnover->currency ?? 'EUR'),
                 ],
 
                 'profit' => [
-                    'amount'   => (float) ($xml->annual_financial_statement_summary->profit->amount ?? 0),
+                    'amount' => (float) ($xml->annual_financial_statement_summary->profit->amount ?? 0),
                     'currency' => (string) ($xml->annual_financial_statement_summary->profit->currency ?? 'EUR'),
                 ],
 
                 'assets' => [
-                    'amount'   => (float) ($xml->annual_financial_statement_summary->assets->amount ?? 0),
+                    'amount' => (float) ($xml->annual_financial_statement_summary->assets->amount ?? 0),
                     'currency' => (string) ($xml->annual_financial_statement_summary->assets->currency ?? 'EUR'),
                 ],
             ],
 
             'capital' => [
                 'paid_up' => (float) ($xml->paid_up_share_capital ?? 0),
-                'issued'  => (float) ($xml->issued_share_capital ?? 0),
+                'issued' => (float) ($xml->issued_share_capital ?? 0),
             ],
 
             'risk' => [
                 'bankrupt' => ((int) $xml->indication_bankruptcy === 1),
-                'active'   => ((int) $xml->indication_economically_active === 1),
+                'active' => ((int) $xml->indication_economically_active === 1),
             ],
         ];
     }
