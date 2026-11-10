@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\QuickscanController;
-use App\Services\Llm\Ollama;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,6 +14,7 @@ Route::get('/quickscan', function () {
 })->middleware(['auth', 'verified'])->name('quickscan');
 
 Route::post('/quickscan', QuickscanController::class)
+    ->middleware(['auth', 'verified'])
     ->name('quickscan.store');
 
 require __DIR__.'/settings.php';
